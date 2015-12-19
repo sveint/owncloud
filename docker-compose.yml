@@ -29,3 +29,5 @@ owncloud-server:
     - OWNCLOUD_SERVERNAME=${docker_owncloud_servername}
     - SSL_CERT="/owncloud.cert"
     - SSL_KEY="/owncloud.key"
+  entrypoint: /bin/bash
+  command: -c "bootstrap.sh"
