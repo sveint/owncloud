@@ -1,5 +1,6 @@
-FROM debian:jessie
-MAINTAINER  Robin Schneider <ypid@riseup.net>
+FROM resin/rpi-raspbian:jessie
+MAINTAINER <sveint@gmail.com>
+# MAINTAINER  Robin Schneider <ypid@riseup.net>
 # MAINTAINER silvio <silvio@port1024.net>
 # MAINTAINER Josh Chaney <josh@chaney.io>
 
