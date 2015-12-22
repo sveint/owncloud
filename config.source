@@ -1,0 +1,22 @@
+
+# Where to store data and database ?
+export docker_owncloud_permanent_storage="/path/to/oc_data/"
+
+# SSL Certificates to use.
+export docker_owncloud_ssl_cert="/path/to/ssl/my_cert.crt"
+export docker_owncloud_ssl_key="/path/to/ssl/my_cert.key"
+
+# Servername (change to domain if you have one)
+export docker_owncloud_servername="localhost"
+
+export docker_owncloud_http_port="80"
+export docker_owncloud_https_port="443"
+export docker_owncloud_in_root_path="1"
+
+export docker_owncloud_mariadb_root_password=put_your_password_here
+export docker_owncloud_mariadb_user_password=put_your_password_here2
+
+# Replace the line below with the name of your built image
+export image_owncloud="myimage/rpi-owncloud"
+export image_mariadb="hypriot/rpi-mysql"
+
