@@ -1,9 +1,9 @@
 # docker-owncloud
 
-[![Docker Stars](https://img.shields.io/docker/stars/jchaney/owncloud.svg)][this.project_docker_hub_url]
-[![Docker Pulls](https://img.shields.io/docker/pulls/jchaney/owncloud.svg)][this.project_docker_hub_url]
-[![ImageLayers Size](https://img.shields.io/imagelayers/image-size/jchaney/owncloud/latest.svg)][this.project_docker_hub_url]
-[![ImageLayers Layers](https://img.shields.io/imagelayers/layers/jchaney/owncloud/latest.svg)][this.project_docker_hub_url]
+Fork of original project by jchaney, adapted to work on Raspberry Pi with HyperionOS for docker support.
+Build the owncloud image, modify config.source, source it and run `docker-compose up`.
+
+Original readme:
 
 Docker image for [ownCloud][] with security in mind.
 
