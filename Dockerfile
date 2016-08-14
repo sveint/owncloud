@@ -10,6 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         bzip2 \
         cron \
         nginx \
+        openssl \
         php-apc \
         php5-apcu \
         php5-cli \
@@ -28,8 +29,8 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         sudo \
         wget
 
-## Check latest version: https://owncloud.org/install/#instructions-server
-ENV OWNCLOUD_VERSION="8.2.1" \
+## Check latest version: https://github.com/owncloud/core/wiki/Maintenance-and-Release-Schedule
+ENV OWNCLOUD_VERSION="9.0.4" \
     OWNCLOUD_IN_ROOTPATH="0" \
     OWNCLOUD_SERVERNAME="localhost"
 
@@ -37,7 +38,6 @@ LABEL com.github.jchaney.owncloud.version="$OWNCLOUD_VERSION" \
       com.github.jchaney.owncloud.license="AGPL-3.0" \
       com.github.jchaney.owncloud.url="https://github.com/sveint/owncloud"
 
-## Could be used: https://github.com/docker-library/owncloud/blob/master/8.1/Dockerfile
 RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys E3036906AD9F30807351FAC32D5D5E97F6978A26
 
 RUN wget --no-verbose --output-document /tmp/oc.tar.bz2 https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2 && \
@@ -52,15 +52,12 @@ RUN mkdir --parent /var/www/owncloud/apps_persistent /owncloud /var/log/cron && 
 ADD misc/bootstrap.sh misc/occ misc/oc-install-3party-apps /usr/local/bin/
 ADD configs/3party_apps.conf configs/nginx_ssl.conf configs/nginx.conf configs/docker_image_owncloud.config.php configs/owncloud_autoconfig.php /root/
 
-## Fixes: PHP is configured to populate raw post data. Since PHP 5.6 this will lead to PHP throwing notices for perfectly valid code. #19
-RUN echo 'always_populate_raw_post_data = -1' | tee --append /etc/php5/cli/php.ini /etc/php5/fpm/php.ini
-
-## Allow usage of `sudo -u www-data php /var/www/owncloud/occ` with APC.
-## FIXME: Temporally: https://github.com/owncloud/core/issues/17329
-RUN echo 'apc.enable_cli = 1' >> /etc/php5/cli/php.ini
-
 ## Fixed warning in admin panel getenv('PATH') == '' for ownCloud 8.1.
 RUN echo 'env[PATH] = /usr/local/bin:/usr/bin:/bin' >> /etc/php5/fpm/pool.d/www.conf
+
+## Increase upload limit to 16G
+RUN sed -ie "s/upload_max_filesize=513M/upload_max_filesize=16G/g" /var/www/owncloud/.user.ini && \
+    sed -ie "s/post_max_size=513M/post_max_size=16G\\nmax_input_time=21600\\nmax_execution_time=21600\\nrequest_terminate_timeout=21600/g" /var/www/owncloud/.user.ini
 
 ADD configs/cron.conf /etc/oc-cron.conf
 RUN crontab /etc/oc-cron.conf
